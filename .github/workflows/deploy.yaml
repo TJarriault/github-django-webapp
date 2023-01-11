@@ -1,0 +1,42 @@
+on: [push]
+
+name: Linux_Container_Node_Workflow
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: npm install and build webpack
+        run: |
+          ls -l
+
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    # checkout the repo
+    - name: 'Checkout Github Action'
+      uses: actions/checkout@v3
+
+    - name: "Login via Azure CLI"
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+
+    - uses: azure/docker-login@v1
+      with:
+        login-server: tjarriaulttttapp2.azurecr.io
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+
+    - run: |
+        docker build . -t tjarriaulttttapp2.azurecr.io/nodejssampleapp:${{ github.sha }}
+        docker push tjarriaulttttapp2.azurecr.io/nodejssampleapp:${{ github.sha }} 
+
+    - uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'tjarriault-ttt-app2'
+        publish-profile: ${{ secrets.azureWebAppPublishProfile }}
+        images: 'tjarriaulttttapp2.azurecr.io/nodejssampleapp:${{ github.sha }}'
