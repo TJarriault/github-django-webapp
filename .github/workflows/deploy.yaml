@@ -37,6 +37,6 @@ jobs:
 
     - uses: azure/webapps-deploy@v2
       with:
-        app-name: 'tjarriault-ttt-app2'
+        app-name: 'test-ngnix-cla'
         publish-profile: ${{ secrets.azureWebAppPublishProfile }}
         images: 'tjarriaulttttapp2.azurecr.io/nodejssampleapp:${{ github.sha }}'
