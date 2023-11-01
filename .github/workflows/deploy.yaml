@@ -35,7 +35,7 @@ jobs:
         docker build . -t tjarriaulttttapp2.azurecr.io/nodejssampleapp:${{ github.sha }}
         docker push tjarriaulttttapp2.azurecr.io/nodejssampleapp:${{ github.sha }} 
 
-    - uses: azure/webapps-deploy@v2
+    - uses: azure/webapps-deploy@v3
       with:
         app-name: 'tjarriault-ttt-app2'
         publish-profile: ${{ secrets.azureWebAppPublishProfile }}
